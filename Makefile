@@ -1,7 +1,7 @@
 # Barcode Writer in Pure PostScript
 # https://bwipp.terryburton.co.uk
 #
-# Copyright (c) 2004-2022 Terry Burton
+# Copyright (c) 2004-2024 Terry Burton
 #
 # $Id$
 
@@ -12,10 +12,11 @@ DSTDIR = build
 CHANGES_FILE=CHANGES
 VERSION:=$(shell head -n 1 $(CHANGES_FILE))
 
-SOURCES:=$(wildcard $(SRCDIR)/*.ps)
+SOURCES:=$(wildcard $(SRCDIR)/*.ps.src)
+
 DOCNAMES:=$(notdir $(wildcard $(DOCDIR)/*))
 
-TARGETS:=$(basename $(notdir $(SOURCES)))
+TARGETS:=$(notdir $(SOURCES:.ps.src=))
 TARGETS:=$(filter-out preamble, $(TARGETS))
 
 UPR_FILE = $(SRCDIR)/uk.co.terryburton.bwipp.upr
@@ -121,15 +122,15 @@ all: resource packaged_resource monolithic monolithic_package
 clean:
 	$(RM) $(cleanlist)
 
-test:
+test: all
 	tests/run_tests
 
-$(SRCDIR)/%.d: $(SRCDIR)/%.ps $(UPR_FILE)
+$(SRCDIR)/%.ps.d: $(SRCDIR)/%.ps.src $(UPR_FILE)
 	$(DSTDIR)/make_deps.pl $< $(addsuffix /Resource,$(RESDIR) $(PACKAGEDIR)) >$@
-cleanlist += ${SOURCES:.ps=.d}
+cleanlist += ${SOURCES:.ps.src=.ps.d}
 
 ifneq "$(MAKECMDGOALS)" "clean"
--include ${SOURCES:.ps=.d}
+-include ${SOURCES:.ps.src=.ps.d}
 endif
 
 #------------------------------------------------------------
@@ -140,10 +141,10 @@ $(RESMKDIRSTAMP):
 	mkdir -p $(RESMKDIRS)
 	touch $@
 
-$(RESDIR)/Resource/uk.co.terryburton.bwipp/%: $(SRCDIR)/%.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(RESMKDIRSTAMP)
+$(RESDIR)/Resource/uk.co.terryburton.bwipp/%: $(SRCDIR)/%.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(RESMKDIRSTAMP)
 	$(DSTDIR)/make_resource.pl $< $@
 
-$(RESDIR)/Resource/Category/uk.co.terryburton.bwipp: $(SRCDIR)/preamble.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(RESMKDIRSTAMP)
+$(RESDIR)/Resource/Category/uk.co.terryburton.bwipp: $(SRCDIR)/preamble.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(RESMKDIRSTAMP)
 	$(DSTDIR)/make_resource.pl $< $@
 
 $(RESDIR)/Resource/uk.co.terryburton.bwipp.upr: $(UPR_FILE) $(RESMKDIRSTAMP)
@@ -167,10 +168,10 @@ $(PACKAGEMKDIRSTAMP):
 	mkdir -p $(PACKAGEMKDIRS)
 	touch $@
 
-$(PACKAGEDIR)/Resource/uk.co.terryburton.bwipp/%: $(SRCDIR)/%.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(PACKAGEMKDIRSTAMP)
+$(PACKAGEDIR)/Resource/uk.co.terryburton.bwipp/%: $(SRCDIR)/%.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(PACKAGEMKDIRSTAMP)
 	$(DSTDIR)/make_resource.pl $< $@
 
-$(PACKAGEDIR)/Resource/Category/uk.co.terryburton.bwipp: $(SRCDIR)/preamble.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(PACKAGEMKDIRSTAMP)
+$(PACKAGEDIR)/Resource/Category/uk.co.terryburton.bwipp: $(SRCDIR)/preamble.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(PACKAGEMKDIRSTAMP)
 	$(DSTDIR)/make_resource.pl $< $@
 
 $(PACKAGEDIR)/Resource/uk.co.terryburton.bwipp.upr: $(UPR_FILE) $(PACKAGEMKDIRSTAMP)
@@ -234,7 +235,7 @@ $(STANDALONE_MKDIRSTAMP):
 	mkdir -p $(STANDALONE_MKDIRS)
 	touch $@
 
-$(STANDALONE_DIR)/%.ps: $(MONOLITHIC_FILE) $(SRCDIR)/%.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(STANDALONE_MKDIRSTAMP)
+$(STANDALONE_DIR)/%.ps: $(MONOLITHIC_FILE) $(SRCDIR)/%.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(STANDALONE_MKDIRSTAMP)
 	$(DSTDIR)/make_standalone.pl $< $@
 
 #------------------------------------------------------------
@@ -243,7 +244,7 @@ $(STANDALONE_PACKAGE_MKDIRSTAMP):
 	mkdir -p $(STANDALONE_PACKAGE_MKDIRS)
 	touch $@
 
-$(STANDALONE_PACKAGE_DIR)/%.ps: $(MONOLITHIC_PACKAGE_FILE) $(SRCDIR)/%.ps $(SRCDIR)/ps.head $(CHANGES_FILE) $(STANDALONE_PACKAGE_MKDIRSTAMP)
+$(STANDALONE_PACKAGE_DIR)/%.ps: $(MONOLITHIC_PACKAGE_FILE) $(SRCDIR)/%.ps.src $(SRCDIR)/ps.head $(CHANGES_FILE) $(STANDALONE_PACKAGE_MKDIRSTAMP)
 	$(DSTDIR)/make_standalone.pl $< $@
 
 #------------------------------------------------------------
@@ -294,15 +295,17 @@ $(RELEASE_MONOLITHIC_PACKAGE_ZIPFILE): $(TARGETS_MONOLITHIC_PACKAGE) $(CHANGES_F
 tag:
 	@echo Push a new tag as follows:
 	@echo
+	@echo Remenber to refresh the wikidocs/ submodule
+	@echo
 	@echo "git tag -s -F /dev/stdin `head -n1 CHANGES` <<'EOF'"
 	@echo "`awk -v 'RS=\n\n\n' -v 'FS=\n\n' '{print $$2;exit}' CHANGES`"
 	@echo EOF
-	@echo git push origin `head -n1 CHANGES`
+	@echo git push upstream `head -n1 CHANGES`
 
 YEAR:=$(shell date +%Y)
 
 copyright:
-	sed -i -e 's@\(Copyright\)\(.*\)\(2004-\)\([[:digit:]]\+\)\( Terry Burton\)@\1\2\3$(YEAR)\5@' $(SOURCES) LICENSE Makefile $(SRCDIR)/ps.head $(DSTDIR)/make_packaged_resource.ps $(DSTDIR)/make_resource.ps
+	sed -i -e 's@\(Copyright\)\(.*\)\(2004-\)\([[:digit:]]\+\)\( Terry Burton\)@\1\2\3$(YEAR)\5@' $(SOURCES) LICENSE Makefile $(SRCDIR)/ps.head $(DSTDIR)/make_packaged_resource.ps $(DSTDIR)/make_resource.ps libs/bindings/postscriptbarcode.i libs/c/*.[ch]
 
 whitespace:
 	perl -p -i -e 's/\s+$$/\n/;' $(SOURCES)

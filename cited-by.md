@@ -47,9 +47,11 @@ Berisso, K. (2018) "DotCode Damage Testing," Journal of Computer Sciences and Ap
 
 West, M., Campbell C. (2018) "barcOwned: Popping Shells with Your Cereal Box," DEF CON 26. <https://www.youtube.com/watch?v=Wy79TLkqArg>
 
+Wells, R. (2018) "British newspaper barcodes explained - and automated," <https://www.robjwells.com/2018/02/british-newspaper-barcodes-explained-and-automated/>
+
 Russell, Robert. (2020) "How to Print QRcodes, Data Matrix, Aztec Codes, Maxi Code and Han Xin Barcodes in SAP," <https://www.rjruss.info/2020/04/how-to-print-qrcodes-data-matrix-aztec.html>
 
-Burton, T. and Wright IV, G. (2020) "GS1 Updates Global Model Number Identifier For Use as a Basic UDI-DI to Meet EU MDR Requirements," MedTech Intelligence. <https://www.medtechintelligence.com/feature_article/gs1-updates-global-model-number-identifier-for-use-as-a-basic-udi-di-to-meet-eu-mdr-requirements/>
+Nyström, Rikard. (2021) "A Machine Vision System for Robotic Operations Quality Control in an Automated Biological Lab," Thesis. <https://umu.diva-portal.org/smash/get/diva2:1584678/FULLTEXT01.pdf>
 
 
 pst-barcode
@@ -59,7 +61,7 @@ Goossens, M., Mittelbach F., Rahtz, S., Roegel, D. (2007) "The LaTeX Graphics Co
 
 Robbers, Yuri & Skjold, Annemarie. (2007) "Creating Book Covers using PSTricks," The PracTex Journal, Number 1.
 
-Thompson, Paul A. (2008) "Clinical trials management on the internet - II. Using LATEX, PostScript, and SAS to produce barcode label sheets," The PracTeX Journal, Number 3.
+Thompson, Paul A. (2008) "Clinical trials management on the internet - II. Using LaTeX, PostScript, and SAS to produce barcode label sheets," The PracTeX Journal, Number 3.
 
 Voß, Herbert. (2010) "The current state of the PSTricks project," The TUGboat Journal, Volume 31i, Number 1. p. 36.
 

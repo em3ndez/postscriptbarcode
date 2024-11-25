@@ -4,7 +4,7 @@
  * @file postscriptbarcode.h
  * @author Terry Burton
  *
- * \copyright Copyright (c) 2004-2021 Terry Burton
+ * \copyright Copyright (c) 2004-2024 Terry Burton
  * Barcode Writer in Pure PostScript
  *
  * @licenseblock{License}
@@ -60,8 +60,8 @@
  *
  */
 
-#ifndef BWIPP_H
-#define BWIPP_H
+#ifndef POSTSCRIPTBARCODE_H
+#define POSTSCRIPTBARCODE_H
 
 // Decorator for public API functions that we export
 #if _WIN32
@@ -155,4 +155,4 @@ BWIPP_API void bwipp_free(void *p);
 }
 #endif
 
-#endif /* BWIPP_H */
+#endif  /* POSTSCRIPTBARCODE_H */

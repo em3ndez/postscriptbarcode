@@ -1,6 +1,13 @@
 #!/bin/bash
 
+# Barcode Writer in Pure PostScript
+# https://bwipp.terryburton.co.uk
+#
+# Copyright (c) 2004-2024 Terry Burton
+
 set -e
+set -u
+set -o pipefail
 
 TESTDIR=$(dirname "$0")
 
@@ -11,4 +18,3 @@ TESTDIR=$(dirname "$0")
 "$TESTDIR"/test_packaged_resource/run
 
 echo "All tests passed."
-
